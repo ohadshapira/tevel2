@@ -16,7 +16,6 @@ def get_all_documents():
     documents=[]
     try:
         # Access database and collection
-        vxc
         db = client["tevel-2"]
         collection = db["mycollection"]  # Replace with your actual collection name
 
@@ -332,20 +331,54 @@ def generate_html(data):
 import subprocess
 
 def git_commit_and_push(commit_message="Auto update"):
+    from github import Github
+
+    with open("github_token.txt", "r") as f:
+        token2 = f.read().strip()
+
+    # Auth with token
+    g = Github(token2)
+
+    # Get repo
+    repo = g.get_repo("ohadshapira/tevel2")
+
+    file_path = "index.html"
+    # Read your file and push it
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
     try:
-        # Add all changes
-        subprocess.run(["git", "add", "index.html"], check=True)
+        file = repo.get_contents(file_path, ref="main")  # adjust branch if needed
+        sha = file.sha
 
-        # Commit with message
-        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+        # Update the file
+        repo.update_file(
+            path=file_path,
+            message="Update dashboard HTML",
+            content=content,
+            sha=sha,
+            branch="main"
+        )
+        print("✅ File updated on GitHub.")
+    except Exception as e:
+        print("❌ Error:", e)
 
-        # Push to the current branch
-        subprocess.run(["git", "push"], check=True)
+    print("✅ File uploaded to GitHub!")
 
-        print("✅ Git changes committed and pushed.")
-
-    except subprocess.CalledProcessError as e:
-        print("❌ Git operation failed:", e)
+    # try:
+    #     # Add all changes
+    #     subprocess.run(["git", "add", "index.html"], check=True)
+    #
+    #     # Commit with message
+    #     subprocess.run(["git", "commit", "-m", commit_message], check=True)
+    #
+    #     # Push to the current branch
+    #     subprocess.run(["git", "push"], check=True)
+    #
+    #     print("✅ Git changes committed and pushed.")
+    #
+    # except subprocess.CalledProcessError as e:
+    #     print("❌ Git operation failed:", e)
 
 
 wait_time_s=60
@@ -359,3 +392,5 @@ while True:
         time.sleep(wait_time_s)
     except KeyboardInterrupt:
         print("🛑 Stopped by user.")
+    except Exception as e:
+        print(e)
