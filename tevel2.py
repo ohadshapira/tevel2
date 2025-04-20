@@ -16,8 +16,8 @@ def get_all_documents():
     documents=[]
     try:
         # Access database and collection
-        db = client["tevel-2"]
-        collection = db["mycollection"]  # Replace with your actual collection name
+        db = client["tevel-15"]
+        collection = db["telemetry"]  # Replace with your actual collection name
 
         # Fetch all documents
         documents = list(collection.find())
@@ -43,7 +43,7 @@ def generate_html(data):
     dedications = []
 
     for entry in data:
-        ground_time = pd.to_datetime(entry["groundTime"]["$date"])
+        ground_time = pd.to_datetime(entry["groundTime"])
         ground_times.append(ground_time)
 
         params = {p["name"]: p["value"] for p in entry["params"]}
