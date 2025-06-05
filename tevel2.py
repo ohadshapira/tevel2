@@ -305,7 +305,7 @@ def generate_html(data):
         </header>
     
         <div class=\"memorial\">
-            <h4>In memory of:</h4>
+            <h4>In memory of the fallen in the Iron Swords War:</h4>
             <div class=\"name\">{latest_in_memory_of}</div>
             <div class=\"time\">Ground time: {latest_ground_time}</div>
         </div>
